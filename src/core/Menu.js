@@ -19,8 +19,27 @@ const Menu = ({ history }) => (
           Home
         </Link>
       </li>
+      <li className="nav-item">
+        <Link
+          className="nav-link"
+          to="/users"
+          style={isActive(history, "/users")}
+        >
+          Users
+        </Link>
+      </li>
       {!isAuthenticated() && (
         <>
+          <li className="nav-item">
+            <Link
+              to={`/post/create`}
+              className="nav-link"
+              style={isActive(history, `/post/create`)}
+            >
+              Create Post
+            </Link>
+          </li>
+
           <li className="nav-item">
             <Link
               className="nav-link"
@@ -45,26 +64,46 @@ const Menu = ({ history }) => (
       {isAuthenticated() && (
         <>
           <li className="nav-item">
-            <button
-              className="nav-link bg-primary"
-              style={
-                (isActive(history, "/signup"),
-                { cursor: "pointer", color: "#fff" })
-              }
-              onClick={() => signout(() => history.push("/"))}
+            <Link
+              to={`/user/findpeople`}
+              className="nav-link"
+              style={isActive(history, `/user/findpeople`)}
             >
-              Signout
-            </button>
+              Find People
+            </Link>
+          </li>
+
+          <li className="nav-item">
+            <Link
+              to={`/post/create`}
+              className="nav-link"
+              style={isActive(history, `/post/create`)}
+            >
+              Create Post
+            </Link>
           </li>
 
           <li className="nav-item">
             <Link
               to={`/user/${isAuthenticated().user._id}`}
               className="nav-link"
-              style={isActive(history, "/user/" + isAuthenticated().user._id)}
+              style={isActive(history, `/user/${isAuthenticated().user._id}`)}
             >
               {`${isAuthenticated().user.name}'s Profile`}
             </Link>
+          </li>
+
+          <li className="nav-item">
+            <span
+              className="nav-link bg-primary"
+              style={
+                (isActive(history, "/signup"),
+                { cursor: "pointer", color: "#fff", borderBottom: "0px" })
+              }
+              onClick={() => signout(() => history.push("/"))}
+            >
+              Signout
+            </span>
           </li>
         </>
       )}

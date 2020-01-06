@@ -1,7 +1,8 @@
 import React, { Component } from "react";
-import { Redirect } from "react-router-dom";
+import { Redirect, Link } from "react-router-dom";
 
 import { signin, authenticate } from "../auth";
+import SocialLogin from "./SocialLogin";
 
 class Signin extends Component {
   state = {
@@ -82,8 +83,17 @@ class Signin extends Component {
         </div>
 
         {loading ? <div className="jumbotron text-center">Loading</div> : ""}
-
+        <hr />
+        <SocialLogin />
+        <hr />
         {this.signinForm(email, password)}
+
+        <p>
+          <Link to="/forgot-password" className="text-danger">
+            {" "}
+            Forgot Password
+          </Link>
+        </p>
       </div>
     );
   }

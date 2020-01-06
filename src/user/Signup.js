@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { Link } from "react-router-dom";
 
 import { signup } from "../auth";
 
@@ -89,7 +90,8 @@ class Signup extends Component {
           className="alert alert-primary"
           style={{ display: message === "" ? "none" : "" }}
         >
-          {message}
+          {`${message} Please,`}
+          <Link to="/signin"> log in</Link>
         </div>
 
         {this.signupForm(name, email, password)}
