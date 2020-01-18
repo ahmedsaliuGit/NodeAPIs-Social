@@ -26,7 +26,7 @@ class EditPost extends Component {
       }
 
       this.setState({
-        id: data._id,
+        id: data.postedBy._id,
         title: data.title,
         body: data.body
       });
@@ -162,7 +162,9 @@ class EditPost extends Component {
           style={{ height: "200px", width: "auto" }}
         />
 
-        {this.postEditForm(title, body)}
+        {(isAuthenticated().user.role === "admin" ||
+          isAuthenticated().user._id === id) &&
+          this.postEditForm(title, body)}
       </div>
     );
   }

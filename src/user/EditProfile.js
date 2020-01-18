@@ -92,12 +92,15 @@ class EditProfile extends Component {
 
     if (this.isValid()) {
       const userId = this.props.match.params.userId;
-      // console.log(user);
 
       update(userId, isAuthenticated().token, this.userData).then(data => {
         if (data.error) {
           this.setState({
             error: data.error
+          });
+        } else if (isAuthenticated().user.role === "admin") {
+          this.setState({
+            redirectToProfile: true
           });
         } else {
           updateUser(data, () => {
@@ -212,7 +215,9 @@ class EditProfile extends Component {
           style={{ height: "200px", width: "auto" }}
         />
 
-        {this.updateForm(name, email, password, about)}
+        {(isAuthenticated().user.role === "admin" ||
+          isAuthenticated().user._id === id) &&
+          this.updateForm(name, email, password, about)}
       </div>
     );
   }

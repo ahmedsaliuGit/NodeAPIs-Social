@@ -6,20 +6,36 @@ import DefaultPhoto from "../images/mountain.jpeg";
 
 class Posts extends Component {
   state = {
-    posts: []
+    posts: [],
+    page: 1,
+    loading: true
+  };
+
+  loadPosts = page => {
+    list(page).then(data => {
+      if (data.error) {
+        console.log(data.error);
+      } else {
+        this.setState({ posts: data });
+      }
+    });
   };
 
   componentDidMount() {
-    list().then(data => {
-      if (data.error) {
-        console.log(data.error);
-      }
-
-      this.setState({ posts: data });
-    });
+    this.loadPosts(this.state.page);
   }
 
-  renderPosts = posts => {
+  loadMore = number => {
+    this.setState({ page: this.state.page + number, loading: false });
+    this.loadPosts(this.state.page + number);
+  };
+
+  loadLess = number => {
+    this.setState({ page: this.state.page - number, loading: false });
+    this.loadPosts(this.state.page - number);
+  };
+
+  renderPosts = (posts, page) => {
     return (
       <div className="row">
         {posts.map((post, i) => {
@@ -52,20 +68,45 @@ class Posts extends Component {
             </div>
           );
         })}
+        {page > 1 ? (
+          <button
+            className="btn btn-raised btn-warning mr-5 mt-5 mb-5"
+            onClick={() => this.loadLess(1)}
+          >
+            Previous ({page - 1})
+          </button>
+        ) : (
+          ""
+        )}
+
+        {posts.length ? (
+          <button
+            className="btn btn-raised btn-success mt-5 mb-5"
+            onClick={() => this.loadMore(1)}
+          >
+            Next ({page + 1})
+          </button>
+        ) : (
+          ""
+        )}
       </div>
     );
   };
 
   render() {
-    const { posts } = this.state;
+    const { posts, page, loading } = this.state;
 
     return (
       <div className="container">
-        <h1 className="mt-5 mb-5">
-          {!posts.length ? "Loading..." : "Recent Posts"}
-        </h1>
+        <h2 className="mt-5 mb-5">
+          {!posts.length
+            ? loading
+              ? "Loading"
+              : "No more posts!"
+            : "Recent Posts"}
+        </h2>
 
-        {this.renderPosts(posts)}
+        {this.renderPosts(posts, page)}
       </div>
     );
   }
